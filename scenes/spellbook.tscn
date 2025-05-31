@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://b248o25tnxdda"]
+
+[ext_resource type="Script" uid="uid://dskewx4puefr7" path="res://scripts/e_Spellbook.gd" id="1_qbvpl"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qbvpl"]
+
+[node name="spellbook" type="Node3D"]
+script = ExtResource("1_qbvpl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.175837, 0, 0, 0, 0.724074, 0, 0, 0, 0.557117, 0, 0, 0)
+mesh = SubResource("BoxMesh_qbvpl")
+
+[node name="LeftPage" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.53657)
+
+[node name="RightPage" type="Node3D" parent="."]
+
+[node name="SpawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(0.667881, -0.218021, 0.711619, 0.191211, 0.974304, 0.119041, -0.719287, 0.0565644, 0.692407, -0.388312, -0.119164, 0.406033)

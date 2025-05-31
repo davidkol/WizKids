@@ -1,0 +1,62 @@
+[gd_scene load_steps=10 format=3 uid="uid://cviav7yump6iv"]
+
+[ext_resource type="Script" uid="uid://de4ji8a3nsivm" path="res://scripts/c_PlayerInput.gd" id="1_3vyb7"]
+[ext_resource type="Script" uid="uid://b6ly5ad3gfkx8" path="res://scripts/e_CharacterMovement.gd" id="1_tuyoq"]
+[ext_resource type="Script" uid="uid://d350u8evihs1u" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="3_qhqgy"]
+[ext_resource type="PackedScene" uid="uid://beavodydkaelg" path="res://addons/netfox.extras/spell/example/fireball.tscn" id="3_smehm"]
+[ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="7_fjrip"]
+[ext_resource type="PackedScene" uid="uid://b248o25tnxdda" path="res://scenes/spellbook.tscn" id="7_smehm"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u8vuu"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3vyb7"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dqkch"]
+
+[node name="body" type="CharacterBody3D" node_paths=PackedStringArray("input", "head")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0121, 0)
+collision_layer = 2
+script = ExtResource("1_tuyoq")
+input = NodePath("input")
+head = NodePath("head")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_u8vuu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_3vyb7")
+
+[node name="head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.621474, 0)
+
+[node name="Camera3D" type="Camera3D" parent="head"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="head"]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, 0, 0.663281, -0.0222951)
+mesh = SubResource("BoxMesh_dqkch")
+
+[node name="spellbook" parent="." node_paths=PackedStringArray("input") instance=ExtResource("7_smehm")]
+transform = Transform3D(-0.676119, -0.207485, 0.706974, -0.143405, 0.978238, 0.14995, -0.722702, 0, -0.69116, -0.508602, 0.142301, -1.07951)
+input = NodePath("../input")
+spell = ExtResource("3_smehm")
+
+[node name="SpawnPoint" parent="spellbook" index="3"]
+transform = Transform3D(0.666586, -0.150668, 0.730044, 0.192624, 0.980913, 0.026562, -0.720111, 0.122918, 0.682886, -0.388312, -0.119164, 0.406033)
+
+[node name="input" type="Node" parent="."]
+script = ExtResource("1_3vyb7")
+
+[node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("3_qhqgy")
+root = NodePath("..")
+state_properties = Array[String]([":transform", ":velocity", "head:transform"])
+input_properties = Array[String](["input:move_direction", "input:look_direction", "input:jump", "input:activate"])
+metadata/_custom_type_script = "uid://d350u8evihs1u"
+
+[node name="TickInterpolator" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("7_fjrip")
+root = NodePath("..")
+properties = Array[String]([":transform", "head:transform"])
+metadata/_custom_type_script = "uid://dour8fehaaugp"
+
+[editable path="spellbook"]

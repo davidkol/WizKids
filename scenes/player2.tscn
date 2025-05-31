@@ -1,0 +1,78 @@
+[gd_scene load_steps=12 format=3 uid="uid://be8c0o5jshdqs"]
+
+[ext_resource type="Script" uid="uid://de4ji8a3nsivm" path="res://scripts/c_PlayerInput.gd" id="1_3ejgl"]
+[ext_resource type="Script" uid="uid://cchwtrsmorbbe" path="res://scripts/c_CharacterMovement.gd" id="2_24gv0"]
+[ext_resource type="Script" uid="uid://dbyvlua3aqt51" path="res://scripts/c_CharacterAim.gd" id="3_dauvq"]
+[ext_resource type="Script" uid="uid://bj84nqf1un3k7" path="res://scripts/c_Teleport.gd" id="4_7f0u4"]
+[ext_resource type="Script" uid="uid://chr4omg2hy3yu" path="res://addons/netfox/rewindable-action.gd" id="5_ftkcl"]
+[ext_resource type="Script" uid="uid://3lbngqcexe0l" path="res://addons/netfox/state-synchronizer.gd" id="6_bsup3"]
+[ext_resource type="Script" uid="uid://d350u8evihs1u" path="res://addons/netfox/rollback/rollback-synchronizer.gd" id="7_ltp6r"]
+[ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="8_5fah0"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u8vuu"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_3vyb7"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dqkch"]
+
+[node name="Player" type="Node"]
+
+[node name="body" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0121, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="body"]
+shape = SubResource("CapsuleShape3D_u8vuu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="body"]
+mesh = SubResource("CapsuleMesh_3vyb7")
+
+[node name="head" type="Node3D" parent="body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.621474, 0)
+
+[node name="Camera3D" type="Camera3D" parent="body/head"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="body/head"]
+transform = Transform3D(0.72, 0, 0, 0, 0.72, 0, 0, 0, 0.72, 0, 0.663281, -0.0222951)
+mesh = SubResource("BoxMesh_dqkch")
+
+[node name="input" type="Node" parent="."]
+script = ExtResource("1_3ejgl")
+
+[node name="movement" type="Node" parent="." node_paths=PackedStringArray("input", "body")]
+script = ExtResource("2_24gv0")
+input = NodePath("../input")
+body = NodePath("../body")
+
+[node name="aim" type="Node" parent="." node_paths=PackedStringArray("input", "body", "head")]
+script = ExtResource("3_dauvq")
+input = NodePath("../input")
+body = NodePath("../body")
+head = NodePath("../body/head")
+
+[node name="teleport" type="Node" parent="." node_paths=PackedStringArray("input", "tick_interpolator")]
+script = ExtResource("4_7f0u4")
+input = NodePath("../input")
+tick_interpolator = NodePath("../TickInterpolator")
+
+[node name="RewindableAction" type="Node" parent="teleport"]
+script = ExtResource("5_ftkcl")
+metadata/_custom_type_script = "uid://chr4omg2hy3yu"
+
+[node name="StateSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("6_bsup3")
+root = NodePath("..")
+properties = Array[String](["body:transform", "body:velocity"])
+metadata/_custom_type_script = "uid://3lbngqcexe0l"
+
+[node name="RollbackSynchronizer" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("7_ltp6r")
+root = NodePath("..")
+state_properties = Array[String](["body:transform", "body:velocity", "body/head:transform", "teleport:last_teleport"])
+input_properties = Array[String](["input:move_direction", "input:look_direction", "input:jump", "input:activate"])
+metadata/_custom_type_script = "uid://d350u8evihs1u"
+
+[node name="TickInterpolator" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("8_5fah0")
+root = NodePath("..")
+properties = Array[String](["body:transform", "body/head:transform"])
+metadata/_custom_type_script = "uid://dour8fehaaugp"

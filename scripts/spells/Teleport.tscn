@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwx3nmednxp17"]
+
+[ext_resource type="Script" uid="uid://31jn06cw6j81" path="res://scripts/spells/s_Teleport.gd" id="1_08mpf"]
+
+[node name="Teleport" type="Node3D"]
+script = ExtResource("1_08mpf")

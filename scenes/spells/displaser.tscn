@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://dnk6cpyivtyl6"]
+
+[ext_resource type="Script" uid="uid://bie4e8v02rxkr" path="res://addons/netfox.extras/spell/example/fireball.gd" id="1_yknv8"]
+[ext_resource type="PackedScene" uid="uid://bfd5jsrwh4l7h" path="res://addons/netfox.extras/spell/example/fireball-projectile.tscn" id="2_bwjsu"]
+[ext_resource type="Texture2D" uid="uid://d0m316gkk004a" path="res://icon.svg" id="3_qd8cb"]
+
+[node name="Fireball" type="Node3D"]
+script = ExtResource("1_yknv8")
+spell_scene = ExtResource("2_bwjsu")
+
+[node name="Decal" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.033627, 0.00939941, -0.272276)
+size = Vector3(0.492126, 0.670166, 0.564514)
+texture_albedo = ExtResource("3_qd8cb")

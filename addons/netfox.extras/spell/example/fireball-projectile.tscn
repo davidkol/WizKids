@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://bfd5jsrwh4l7h"]
+
+[ext_resource type="Script" uid="uid://b0124o633mrgl" path="res://addons/netfox.extras/spell/example/fireball-projectile.gd" id="1_2k4m3"]
+[ext_resource type="Script" uid="uid://dour8fehaaugp" path="res://addons/netfox/tick-interpolator.gd" id="2_xqknt"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_b0t0o"]
+radius = 0.75
+
+[sub_resource type="SphereMesh" id="SphereMesh_yapvm"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_xqknt"]
+radius = 4.0
+
+[node name="FireballProjectile" type="ShapeCast3D"]
+shape = SubResource("SphereShape3D_b0t0o")
+target_position = Vector3(0, 0, 0)
+collision_mask = 2
+script = ExtResource("1_2k4m3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_yapvm")
+
+[node name="TickInterpolator" type="Node" parent="." node_paths=PackedStringArray("root")]
+script = ExtResource("2_xqknt")
+root = NodePath("..")
+properties = Array[String]([":global_position"])
+metadata/_custom_type_script = "uid://dour8fehaaugp"
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="."]
+enabled = false
+shape = SubResource("SphereShape3D_xqknt")
+target_position = Vector3(0, 0, 0)
+collision_mask = 2
